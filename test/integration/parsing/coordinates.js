@@ -40,6 +40,14 @@ describe('.parse() coordinates', () => {
       row: {index: 0, isAbsolute: false, label: '1'},
       column: {index: 0, isAbsolute: false, label: 'A'},
     });
+
+    expect(parser.parse("'Sheet 2'!a1")).toMatchObject({error: null, result: 55});
+    expect(cellCoord).toMatchObject({
+      label: 'A1',
+      sheet: 'Sheet 2',
+      row: {index: 0, isAbsolute: false, label: '1'},
+      column: {index: 0, isAbsolute: false, label: 'A'},
+    });
   });
 
   it('should parse absolute cell', () => {

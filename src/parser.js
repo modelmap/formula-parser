@@ -4,7 +4,7 @@ import {Parser as GrammarParser} from './grammar-parser/grammar-parser';
 import {trimEdges} from './helper/string';
 import {toNumber, invertNumber} from './helper/number';
 import errorParser, {isValidStrict as isErrorValid, ERROR, ERROR_NAME} from './error';
-import {extractLabel, toLabel} from './helper/cell';
+import {extractLabel, toLabel, extractSheet} from './helper/cell';
 
 /**
  * @class Parser
@@ -171,13 +171,14 @@ class Parser extends Emitter {
    * @returns {*}
    * @private
    */
-  _callCellValue(label) {
+  _callCellValue(argLabel) {
+    let {label, sheet} = extractSheet(argLabel);
     label = label.toUpperCase();
 
     const [row, column] = extractLabel(label);
     let value = void 0;
 
-    this.emit('callCellValue', {label, row, column}, (_value) => {
+    this.emit('callCellValue', {label, row, column, sheet}, (_value) => {
       value = _value;
     });
 

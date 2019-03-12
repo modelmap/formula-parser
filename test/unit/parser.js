@@ -199,7 +199,8 @@ describe('Parser', () => {
 
     it('should return value under specified coordinates', () => {
       parser.on('callCellValue', (cell, done) => {
-        const {row, column} = cell;
+        const {row, column, sheet} = cell;
+        if(!row || !cell) console.info(cell);
         let value;
 
         if (row.index === 0 && column.index === 2) {
@@ -210,6 +211,8 @@ describe('Parser', () => {
           value = [1, 2, 3];
         } else if (row.index === 3 && column.index === 7 && column.isAbsolute) {
           value = true;
+        } else if (row.index === 4 && row.isAbsolute && column.index === 7 && column.isAbsolute && sheet === 'Sheet 2') {
+          value = 0.3;
         } else if (row.index === 4 && row.isAbsolute && column.index === 7 && column.isAbsolute) {
           value = 0.9;
         }
@@ -223,6 +226,7 @@ describe('Parser', () => {
       expect(parser._callCellValue('H3')).toMatchObject([1, 2, 3]);
       expect(parser._callCellValue('$H4')).toBe(true);
       expect(parser._callCellValue('$H$5')).toBe(0.9);
+      expect(parser._callCellValue("'Sheet 2'!$H$5")).toBe(0.3);
     });
   });
 
